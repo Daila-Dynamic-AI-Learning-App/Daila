@@ -11,40 +11,46 @@ import { View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import qs from 'qs';
 
-function HomeScreen({ }) {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+
+function HomeScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-const navigation = useNavigation();
+  const navigation = useNavigation();
 
-const handleLogin = async () => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: 'https://daila.onrender.com/api/v1/login',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: {
+  const handleLogin = async () => {
+    try{
+      var data = qs.stringify({
         email: email,
-        password: password
-      }
-    });
+        password: password,
+      });
 
-    console.log(error.response.data);
+      var config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://daila.onrender.com/api/v1/login',
+        headers: { },
+        data : data
+      };
+      
+      const response = await axios (config);
+      console.log(response.data); // add this line to see the response on console
+      
+      // save the token to local storage or state
+      setToken(response.data.token);
+      await AsyncStorage.setItem('token', response.data.token);
 
-    // save the token to local storage or state
-    setToken(response.data.token);
-    await AsyncStorage.setItem('token', response.data.token);
-
-    navigation.navigate('Login');
-  } catch (error) {
-    console.error(error);
-  }
-};
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error(error);
+      setError('Invalid email or password');
+    }
+  };
+  
 
  const toggleShowPassword = () => {
     setShowPassword(!showPassword);

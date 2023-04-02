@@ -8,45 +8,57 @@ import { StyleSheet,
   ScrollView 
 } from 'react-native';
 import axios from 'axios';
+import qs from 'qs';
+import { useNavigation } from '@react-navigation/native';
 
-
-const NewUser = ({ navigation }) => {
+const NewUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [country, setCountry] = useState('');
+  const [state, setState] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const navigation = useNavigation();
   
   const handleSignup = async () => {
-  if (password !== confirmPassword) {
-    setError("Passwords don't match.");
-    return;
-  }
-
-  try {
-    const data = {
-      email: email,
-      password: password,
-      username: username,
-    };
-    const config = {
+    if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+    if (!email || !password || !username || !country) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    var data = qs.stringify({
+      'email': email,
+      'password': password,
+      'username': username,
+      'country': country, 
+    });
+    var config = {
       method: 'post',
+      maxBodyLength: Infinity,
       url: 'https://daila.onrender.com/api/v1/register',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: data,
+      headers: { },
+      data: data
     };
-    const response = await axios(config);
-    console.log(response.data);
-    navigation.navigate('Login');
-  } catch (error) {
-    setError(error.message);
-  }
-};
-
- const toggleShowPassword = () => {
+    try {
+      const response = await axios(config);
+      console.log(JSON.stringify(response.data));
+      if (response.data.message === 'success') {
+        navigation.navigate('Home');
+      } else {
+        setError(response.data.error || 'Something went wrong.');
+      }
+    } catch (error) {
+      console.error(error);
+      setError('Network error. Please try again later.');
+    }
+  };
+  
+  const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
@@ -70,6 +82,18 @@ return (
     </View>
 
     <View style={styles.inputContainer}>
+    <Image source={require('./assets/flag-icon.png')}
+           style={styles.icon} />
+
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter your country"
+        value={country}
+        onChangeText={setCountry}
+      />
+    </View>
+
+    <View style={styles.inputContainer}>
     <Image source={require('./assets/gMail.png')}
            style={styles.icon} />
 
@@ -83,8 +107,8 @@ return (
       />
     </View>
     
+   
     <View style={styles.line} />
-
 
     <View style={styles.inputContainer}>
      <Image source={require('./assets/passWord.png')} style={styles.icon} />
@@ -158,7 +182,7 @@ const styles = StyleSheet.create({
   },
 
   boxx: {
-    marginTop: 110,
+    marginTop: 80,
   },
   
   inputContainer: {
