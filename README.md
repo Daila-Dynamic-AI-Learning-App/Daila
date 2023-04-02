@@ -1,1 +1,6 @@
-The AI Learning App
+
+AI app
+
+# app-dev
+react_native projects
+

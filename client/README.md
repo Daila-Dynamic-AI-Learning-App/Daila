@@ -1,1 +1,0 @@
-FrontEnt React Native code
