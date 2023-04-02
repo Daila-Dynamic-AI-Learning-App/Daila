@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, 
-  Text, 
-  Image, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
-  ScrollView 
+import { StyleSheet,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ScrollView
 } from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
@@ -66,9 +66,9 @@ return (
 
 <ScrollView>
   <View style={styles.container}>
-     
+
     <View style={styles.boxx}>
-       
+
     <View style={styles.inputContainer}>
     <Image source={require('./assets/trans.png')}
            style={styles.icon}  />
@@ -142,7 +142,7 @@ return (
         onChangeText={setConfirmPassword}
          secureTextEntry={!showPassword}
       />
-    
+
       <TouchableOpacity onPress={toggleShowPassword}>
               <Image
                 source={
@@ -159,13 +159,13 @@ return (
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
       <Text style={styles.error}>{error}</Text>
-   
+
     </View>
-     
-    </View>      
-  
+
+    </View>
+
 </ScrollView>
-    
+
   );
 };
 
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   boxx: {
     marginTop: 80,
   },
-  
+
   inputContainer: {
       padding: 10,
       backgroundColor: 'white',
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
       shadowRadius: 5,
       elevation: 5,
       marginLeft: 20,
-      marginRight: 20,    
+      marginRight: 20,
     },
 
  inputt: {
@@ -225,9 +225,9 @@ const styles = StyleSheet.create({
  icon: {
     marginRight: 10,
     height: 15,
-    width: 15,    
+    width: 15,
   },
-  
+
     line: {
     height: 1,
     backgroundColor: 'black',
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     innerBottonsContainer:{
         //backgroundColor: 'yellow',
         height: 80,
-        alignItems: 'center', 
+        alignItems: 'center',
         justifyContent: 'center',
         paddingLeft: 10,
         paddingRight: 0,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
         //paddingBottom: 40,
         flexDirection: 'row',
         //marginLeft: 3,
-        marginRight: 15, 
+        marginRight: 15,
         width: '100%',
      },
 
@@ -260,10 +260,10 @@ const styles = StyleSheet.create({
     width: '70%',
     alignSelf: 'center',
     marginTop: 50,
-    alignItems: 'center',  
+    alignItems: 'center',
     height: 40,
     },
-  
+
 });
 
 export default NewUser;
