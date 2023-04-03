@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { View, 
-  Text, 
-  Image, 
-  StyleSheet, 
-  TextInput, 
-  TouchableOpacity, 
-  ScrollView, 
-  KeyboardAvoidingView, 
-  AsyncStorage
+import { View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import qs from 'qs';
 
 
 function HomeScreen() {
@@ -23,43 +22,41 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    var data = {
+      email,
+      password,
+    };
+
+    var config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://daila.onrender.com/api/v1/login',
+      headers: {'content-type': 'application/json' },
+      data: data
+    };
     try{
-      var data = qs.stringify({
-        email: email,
-        password: password,
-      });
-
-      var config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'https://daila.onrender.com/api/v1/login',
-        headers: { },
-        data : data
-      };
-      
-      const response = await axios (config);
+      const response = await axios(config);
       console.log(response.data); // add this line to see the response on console
-      
-      // save the token to local storage or state
-      setToken(response.data.token);
-      await AsyncStorage.setItem('token', response.data.token);
 
+      // update the token value in the state
+      setToken(response.data.token);
+
+      // save the token in the async storage
+      await AsyncStorage.setItem('token', response.data.token);
       navigation.navigate('Login');
     } catch (error) {
       console.error(error);
       setError('Invalid email or password');
     }
   };
-  
 
- const toggleShowPassword = () => {
+  const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  return (
-
+return (
     <ScrollView>
-    
+
     <View style={styles.container}>
          <View style={styles.subContainer}>
               <Image  source={require('./assets/daila-1.png')}
@@ -70,16 +67,16 @@ function HomeScreen() {
                        Your Dynamic AI Learning App
                   </Text>
               </View>
-      
+
         <KeyboardAvoidingView>
-        
+
         <View style={styles.inputContainer}>
           <Image source={require('./assets/gMail.png')}
            style={styles.icon}  />
-      
+
               <TextInput
               style={styles.input}
-              placeholder="Enter your email" 
+              placeholder="Enter your email"
               value={email}
               onChangeText={text => setEmail(text)}
               />
@@ -87,10 +84,10 @@ function HomeScreen() {
 
         <View style={styles.inputContainer}>
           <Image source={require('./assets/passWord.png')} style={styles.icon} />
-          
+
           <TextInput
               style={styles.input}
-              placeholder="Enter your password" 
+              placeholder="Enter your password"
               value={password}
               onChangeText={text => setPassword(text)}
               secureTextEntry={!showPassword}
@@ -106,14 +103,14 @@ function HomeScreen() {
               />
             </TouchableOpacity>
         </View>
-        
+
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text  style={styles.subtitleB}>
             Forgot Password?
         </Text>
         </TouchableOpacity>
-                <TouchableOpacity 
-                  onPress={handleLogin} 
+                <TouchableOpacity
+                  onPress={handleLogin}
                     style={styles.customLogIn}
                       >
                     <Text style={styles.text}>Login</Text>
@@ -121,7 +118,7 @@ function HomeScreen() {
 
             <View style={styles.signupContainer}>
                 <Text style={styles.signupText}>Need an account? </Text>
-                
+
                 <TouchableOpacity onPress={() => navigation.navigate('UserSignup')}>
                     <Text style={[styles.signupText, styles.signupLink]}>Sign Up</Text>
               </TouchableOpacity>
@@ -129,14 +126,14 @@ function HomeScreen() {
         </KeyboardAvoidingView>
       </View>
   </ScrollView>
-  
-    );
+
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //alignItems: 'center', 
+    //alignItems: 'center',
     //justifyContent: 'center'
   },
 
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
-        alignItems: 'center', 
+        alignItems: 'center',
         justifyContent: 'center',
         width: '100%'
       },
@@ -159,7 +156,7 @@ const styles = StyleSheet.create({
       fontStyle: 'normal',
     },
 
-      subtitle: { 
+      subtitle: {
       color: 'white',
        fontSize: 16,
        textAlign: 'center',
@@ -172,7 +169,7 @@ const styles = StyleSheet.create({
       width: 150,
       height: 200,
       marginBottom: 0,
-      
+
     },
 
     inputContainer: {
@@ -190,10 +187,10 @@ const styles = StyleSheet.create({
       shadowRadius: 5,
       elevation: 5,
       marginLeft: 20,
-      marginRight: 20,    
+      marginRight: 20,
     },
-    
-    
+
+
     icon: {
     marginRight: 10,
     height: 15,
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
 
-     subtitleB: { 
+     subtitleB: {
       color: 'black',
        fontSize: 10,
        textAlign: 'right',
@@ -216,7 +213,7 @@ const styles = StyleSheet.create({
        position: 'absolute',
      },
 
-      subtitleC: { 
+      subtitleC: {
       color: 'black',
        fontSize: 10,
        textAlign: 'right',
@@ -250,10 +247,10 @@ const styles = StyleSheet.create({
     width: '70%',
     alignSelf: 'center',
     marginTop: 50,
-    alignItems: 'center',  
+    alignItems: 'center',
     height: 40,
     },
-  
+
   text: {
     color: '#0bdc9f',
     fontSize: 15,
