@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { View,
+import React, { useState } from "react";
+import {
+  View,
   Text,
   Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-
+  KeyboardAvoidingView,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 function HomeScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigation = useNavigation();
 
   const handleLogin = async () => {
@@ -28,13 +28,14 @@ function HomeScreen() {
     };
 
     var config = {
-      method: 'post',
+      method: "post",
       maxBodyLength: Infinity,
-      url: 'https://daila.onrender.com/api/v1/login',
-      headers: {'content-type': 'application/json' },
-      data: data
+      url: "https://daila.onrender.com/api/v1/login",
+      headers: { "content-type": "application/json" },
+      data: data,
     };
-    try{
+
+    try {
       const response = await axios(config);
       console.log(response.data); // add this line to see the response on console
 
@@ -42,11 +43,11 @@ function HomeScreen() {
       setToken(response.data.token);
 
       // save the token in the async storage
-      await AsyncStorage.setItem('token', response.data.token);
-      navigation.navigate('Login');
+      await AsyncStorage.setItem("token", response.data.token);
+      navigation.navigate("Login");
     } catch (error) {
       console.error(error);
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     }
   };
 
@@ -54,79 +55,71 @@ function HomeScreen() {
     setShowPassword(!showPassword);
   };
 
-return (
+  return (
     <ScrollView>
-
-    <View style={styles.container}>
-         <View style={styles.subContainer}>
-              <Image  source={require('./assets/daila-1.png')}
-            style={styles.logo}
-          />
-                   <Text style={styles.welcome}>Welcome</Text>
-                   <Text style={styles.subtitle}>
-                       Your Dynamic AI Learning App
-                  </Text>
-              </View>
+      <View style={styles.container}>
+        <View style={styles.subContainer}>
+          <Image source={require("./assets/daila-1.png")} style={styles.logo} />
+          <Text style={styles.welcome}>Welcome</Text>
+          <Text style={styles.subtitle}>Your Dynamic AI Learning App</Text>
+        </View>
 
         <KeyboardAvoidingView>
+          <View style={styles.inputContainer}>
+            <Image source={require("./assets/gMail.png")} style={styles.icon} />
 
-        <View style={styles.inputContainer}>
-          <Image source={require('./assets/gMail.png')}
-           style={styles.icon}  />
-
-              <TextInput
+            <TextInput
               style={styles.input}
               placeholder="Enter your email"
               value={email}
-              onChangeText={text => setEmail(text)}
-              />
-        </View>
+              onChangeText={(text) => setEmail(text)}
+            />
+          </View>
 
-        <View style={styles.inputContainer}>
-          <Image source={require('./assets/passWord.png')} style={styles.icon} />
+          <View style={styles.inputContainer}>
+            <Image
+              source={require("./assets/passWord.png")}
+              style={styles.icon}
+            />
 
-          <TextInput
+            <TextInput
               style={styles.input}
               placeholder="Enter your password"
               value={password}
-              onChangeText={text => setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity onPress={toggleShowPassword}>
+            />
+            <TouchableOpacity onPress={toggleShowPassword}>
               <Image
                 source={
                   showPassword
-                    ? require('./assets/showPass.png')
-                    : require('./assets/showPass.png')
+                    ? require("./assets/showPass.png")
+                    : require("./assets/showPass.png")
                 }
                 style={styles.icon}
               />
             </TouchableOpacity>
-        </View>
+          </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text  style={styles.subtitleB}>
-            Forgot Password?
-        </Text>
-        </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleLogin}
-                    style={styles.customLogIn}
-                      >
-                    <Text style={styles.text}>Login</Text>
-                    </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.subtitleB}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogin} style={styles.customLogIn}>
+            <Text style={styles.text}>Login</Text>
+          </TouchableOpacity>
 
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>Need an account? </Text>
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Need an account? </Text>
 
-                <TouchableOpacity onPress={() => navigation.navigate('UserSignup')}>
-                    <Text style={[styles.signupText, styles.signupLink]}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("UserSignup")}>
+              <Text style={[styles.signupText, styles.signupLink]}>
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
       </View>
-  </ScrollView>
-
+    </ScrollView>
   );
 }
 
@@ -137,64 +130,62 @@ const styles = StyleSheet.create({
     //justifyContent: 'center'
   },
 
-  subContainer:{
-        backgroundColor: "#3C4142",
-        //padding: 100,
-        height: 280,
-        marginTop: 0,
-        borderBottomLeftRadius: 50,
-        borderBottomRightRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%'
-      },
+  subContainer: {
+    backgroundColor: "#3C4142",
+    //padding: 100,
+    height: 280,
+    marginTop: 0,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
 
-     welcome: {
-      color: '#0bdc9f',
-      fontSize: 46,
-      fontWeight: 'bold',
-      fontStyle: 'normal',
-    },
+  welcome: {
+    color: "#0bdc9f",
+    fontSize: 46,
+    fontWeight: "bold",
+    fontStyle: "normal",
+  },
 
-      subtitle: {
-      color: 'white',
-       fontSize: 16,
-       textAlign: 'center',
-      width: 250,
-      marginBottom: 30,
-      //fontWeight: 'bold',
-    },
+  subtitle: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    width: 250,
+    marginBottom: 30,
+    //fontWeight: 'bold',
+  },
 
-    logo: {
-      width: 150,
-      height: 200,
-      marginBottom: 0,
+  logo: {
+    width: 150,
+    height: 200,
+    marginBottom: 0,
+  },
 
-    },
+  inputContainer: {
+    padding: 10,
+    backgroundColor: "white",
+    marginTop: 30,
+    flexDirection: "row",
+    borderRadius: 10,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    marginLeft: 20,
+    marginRight: 20,
+  },
 
-    inputContainer: {
-      padding: 10,
-      backgroundColor: 'white',
-      marginTop: 30,
-      flexDirection: 'row',
-      borderRadius: 10,
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: '#ddd',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 5,
-      marginLeft: 20,
-      marginRight: 20,
-    },
-
-
-    icon: {
+  icon: {
     marginRight: 10,
     height: 15,
-    width: 15
+    width: 15,
   },
 
   input: {
@@ -202,62 +193,60 @@ const styles = StyleSheet.create({
     height: 40,
   },
 
-     subtitleB: {
-      color: 'black',
-       fontSize: 10,
-       textAlign: 'right',
-      width: 100,
-      marginTop: 5,
-       fontWeight: 'bold',
-       right: 25,
-       position: 'absolute',
-     },
-
-      subtitleC: {
-      color: 'black',
-       fontSize: 10,
-       textAlign: 'right',
-      width: 100,
-      marginTop: 10,
-       fontWeight: 'bold',
-       right: 25,
-       position: 'absolute',
-     },
-
-      signupContainer: {
-        flexDirection: 'row',
-        marginBottom: 10,
-        marginTop: 50,
-        alignSelf: 'center',
-  },
-      signupText: {
-      color: 'black',
-    },
-
-    signupLink: {
-      fontWeight: 'bold',
-      marginLeft: 5,
-      color: 'black'
+  subtitleB: {
+    color: "black",
+    fontSize: 10,
+    textAlign: "right",
+    width: 100,
+    marginTop: 5,
+    fontWeight: "bold",
+    right: 25,
+    position: "absolute",
   },
 
-    customLogIn: {
-    backgroundColor: '#3C4142',
+  subtitleC: {
+    color: "black",
+    fontSize: 10,
+    textAlign: "right",
+    width: 100,
+    marginTop: 10,
+    fontWeight: "bold",
+    right: 25,
+    position: "absolute",
+  },
+
+  signupContainer: {
+    flexDirection: "row",
+    marginBottom: 10,
+    marginTop: 50,
+    alignSelf: "center",
+  },
+  signupText: {
+    color: "black",
+  },
+
+  signupLink: {
+    fontWeight: "bold",
+    marginLeft: 5,
+    color: "black",
+  },
+
+  customLogIn: {
+    backgroundColor: "#3C4142",
     borderRadius: 10,
     padding: 8,
-    width: '70%',
-    alignSelf: 'center',
+    width: "70%",
+    alignSelf: "center",
     marginTop: 50,
-    alignItems: 'center',
+    alignItems: "center",
     height: 40,
-    },
-
-  text: {
-    color: '#0bdc9f',
-    fontSize: 15,
-    fontWeight: 'bold'
   },
 
-})
-
+  text: {
+    color: "#0bdc9f",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+});
 
 export default HomeScreen;
