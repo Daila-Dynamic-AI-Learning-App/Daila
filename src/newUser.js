@@ -48,7 +48,7 @@ const NewUser = () => {
       const response = await axios(config);
       console.log(JSON.stringify(response.data));
       if (response.data.message === 'success') {
-        navigation.navigate('Home');
+        navigation.navigate('Login');
       } else {
         setError(response.data.error || 'Something went wrong.');
       }

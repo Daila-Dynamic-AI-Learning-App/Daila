@@ -11,9 +11,11 @@ import { View,
   Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
+/*
 function WarningDialog({ onConfirm, onCancel }) {
   const text = 'Your progress will be lost if you cancel your work';
   const navigation = useNavigation();
@@ -64,106 +66,75 @@ function WarningDialog({ onConfirm, onCancel }) {
   );
     
 }
+*/
 
 function SignupScreen() {
-
   const [questionIndex, setQuestionIndex] = useState(0);
-const [questions, setQuestions] = useState([]);
-const [answerInput, setAnswerInput] = useState('');
-const [prompt, setPrompt] = useState('');
-const [isLoading, setIsLoading] = useState(true);
-const [showWarning, setShowWarning] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [answerInput, setAnswerInput] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [showWarning, setShowWarning] = useState(false);
+  const [prompt, setPrompt] = useState('');
+  const navigation = useNavigation();
 
-const navigation = useNavigation();
-useEffect(() => {
-  const fetchData = async () => {
-    const studyId = 'YOUR_STUDY_ID_HERE';
-    const token = 'YOUR_AUTHORIZATION_TOKEN_HERE';
+  useEffect(() => {
+    const loadPrompt = async () => {
+      const prompt = await AsyncStorage.getItem('prompt');
+      if (prompt) {
+        setPrompt(prompt);
+      }
+    };
+    loadPrompt();
+  }, []);
 
+  const handleAnswerSubmit = async () => {
+    const studyId = await AsyncStorage.getItem('studyId');
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://daila.onrender.com/api/v1/question/${studyId}`,
+      headers: { 
+        'X-Token': 'f1fa2b39-bea7-4c4c-abf1-7c31503be0c5'
+      }
+    };
+  
     try {
-      const response = await axios.get(
-        `https://daila.onrender.com/api/v1/question/6424a1c9210f2d7c7036c42f?studyId=${studyId}`,
-        {
-          headers: {
-            'X-Token': token,
-          },
-        },
-      );
-
-      setPrompt(response.data.prompt);
+      const response = await axios(config);
+      console.log(`Status: ${response.status}`);
+      console.log(`Prompt: ${response.data.prompt}`);
       setQuestions(response.data.questions);
       setIsLoading(false);
+      if (response.data.end) {
+        navigation.navigate('Answers');
+      } else {
+        setPrompt(response.data.prompt);
+        setAnswerInput('');
+        setQuestionIndex(questionIndex + 1);
+      }
     } catch (error) {
       console.log(error);
+      setShowWarning(true);
     }
   };
+  
+  
 
-  fetchData();
-}, []);
-
-
-const handleAnswerSubmit = () => {
-  if (questionIndex < questions.length - 1){
-    setAnswerInput('');
-    setQuestionIndex(questionIndex + 1);
-  }
-  else{
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigation.navigate('Answers');
-    }, 2000);
-  }
-};
-
-const handleCancelPress = () => {
+  const handleCancelPress = () => {
     setShowWarning(true);
   };
 
   const handleWarningConfirm = () => {
     setShowWarning(false);
   };
-
-/*
-  if (isLoading){
-    return (
-      <View style={styles.loadingContainer}>
-          <Image source={require('./assets/Iconnn.png') }
-            style={styles.logo} 
-            resizeMode='contain'
-            />
-            <Text style={styles.subtitle}>Checking Answers...</Text>
-      </View>
-    );
-  }
-*/
-
- if (showWarning) {
-    return (
-    <WarningDialog 
-      onConfirm={handleWarningConfirm} 
-      onCancel={() => setShowWarning(false)}
-    />
-  );
-  }
   //0559340134
   return (    
 
       <KeyboardAvoidingView>
         <ScrollView>
-          
+       
       <View style={[styles.container, styles.content,  { zIndex: 0 }]}>
 
-        {showWarning && <View style={[styles.overlay, { zIndex: 1 }]} />}
-        {showWarning && (
-          
-            <WarningDialog
-              onConfirm={handleWarningConfirm}
-              onCancel={() => setShowWarning(false)}
-              navigation={navigation}
-            />
-        )}
-
+        
       <View style={styles.subContainerB}>
                 <Text style={styles.welcome}>{prompt}</Text>
       </View>
@@ -612,3 +583,29 @@ const handleCancelPress = () => {
 
 
 export default SignupScreen;
+
+ /* const handleAnswerSubmit = () => {
+    if (questionIndex < questions.length - 1){
+      setAnswerInput('');
+      setQuestionIndex(questionIndex + 1);
+    } else {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        navigation.navigate('Answers');
+      }, 6000);
+    }
+  };*/
+  /*
+  if (isLoading){
+    return (
+      <View style={styles.loadingContainer}>
+          <Image source={require('./assets/Iconnn.png') }
+            style={styles.logo} 
+            resizeMode='contain'
+            />
+            <Text style={styles.subtitle}>Loading...</Text>
+      </View>
+    );
+  }
+*/

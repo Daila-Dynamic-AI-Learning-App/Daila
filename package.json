@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@parse/react-native": "^0.0.1-alpha.18",
-    "@react-native-async-storage/async-storage": "1.17.11",
+    "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/blur": "^4.3.0",
     "@react-native-picker/picker": "2.4.8",
     "@react-navigation/native": "^6.1.6",

@@ -23,33 +23,39 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    try{
-      var data = qs.stringify({
+    try {
+      const data = {
         email: email,
         password: password,
-      });
-
-      var config = {
+      };
+  
+      const config = {
         method: 'get',
         maxBodyLength: Infinity,
         url: 'https://daila.onrender.com/api/v1/login',
-        headers: { },
-        data : data
+        headers: {
+        },
+        data: JSON.stringify(data)
       };
-      
-      const response = await axios (config);
-      console.log(response.data); // add this line to see the response on console
-      
-      // save the token to local storage or state
+  
+      console.log("Request headers:", config.headers);
+      console.log("Request body:", data);
+  
+      const response = await axios(config);
+  
+      console.log(response.data);
+  
       setToken(response.data.token);
       await AsyncStorage.setItem('token', response.data.token);
-
+  
       navigation.navigate('Login');
     } catch (error) {
       console.error(error);
       setError('Invalid email or password');
     }
   };
+  
+  
   
 
  const toggleShowPassword = () => {

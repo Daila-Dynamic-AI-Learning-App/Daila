@@ -3,13 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet, } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 function LoginScreen() {
 
-    const [levelOfStudy, setLevelOfStudy] = useState('Elementary School');
-    const [interestedTopics, setInterestedTopics] = useState('Social Studies');
+    const [levelOfStudy, setLevelOfStudy] = useState('');
+    const [interestedTopics, setInterestedTopics] = useState('');
     const navigation = useNavigation();
+    
 
     const elementarySchoolSubjects = [
     'Social Studies',
@@ -78,18 +81,40 @@ function LoginScreen() {
       : collegeSubjects;
 
 const handleSubmit = () => {
-  axios.post('https://daila.onrender.com/api/v1/study', {
+  var qs = require('qs');
+  var data = qs.stringify({
     studyLevel: levelOfStudy,
     topicOfInterest: interestedTopics,
-    //studyYear: //set the study year value here
-  })
-  .then(response => {
-    //handle response
-  })
-  .catch(error => {
-    //handle error
+    'studyYear': '1st year' 
   });
-}
+  var config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://daila.onrender.com/api/v1/study',
+    headers: { 
+      'X-Token': 'f1fa2b39-bea7-4c4c-abf1-7c31503be0c5'
+    },
+    data: data
+  };
+
+  axios(config)
+    .then(async function (response) {
+      console.log(JSON.stringify(data));
+      console.log(JSON.stringify(response.data));
+      try {
+        await AsyncStorage.setItem('studyId', response.data.studyId);
+        console.log('studyId stored successfully');
+      } catch (error) {
+        console.log('Error storing studyId: ', error);
+        const studyId = await AsyncStorage.getItem('studyId');
+        console.log('Study ID:', studyId);
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 
 
     return (

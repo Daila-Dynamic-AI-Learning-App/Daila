@@ -21,7 +21,7 @@ import NewUser from './src/newUser';
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
  
   useEffect(() => {
     setTimeout(() => {

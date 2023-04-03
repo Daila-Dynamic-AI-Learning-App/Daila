@@ -1,10 +1,45 @@
-import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
 
 function BellPrompt() {
 
     const navigation = useNavigation();
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [answerInput, setAnswerInput] = useState('');
+    const [prompt, setPrompt] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [showWarning, setShowWarning] = useState(false);
+    
+    const getQuestionById = async () => {
+      
+      const studyId = await AsyncStorage.getItem('studyId');
+  
+      const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://daila.onrender.com/api/v1/question/${studyId}`,
+        headers: { 
+          'X-Token': 'f1fa2b39-bea7-4c4c-abf1-7c31503be0c5'
+        }
+      };
+    
+      
+  try {
+    setPrompt(''); 
+    const response = await axios(config);
+    setPrompt(response.data.prompt);
+    AsyncStorage.setItem('prompt', response.data.prompt);
+    setIsLoading(false);
+    console.log('Request was successful!');
+  } catch (error) {
+    console.log(error);
+    setShowWarning(true);
+  } 
+};
 
   return (
     <View style={styles.container}>
@@ -22,14 +57,16 @@ function BellPrompt() {
       
     </View>
 
-        <TouchableOpacity 
-        onPress={() => 
-        navigation.navigate('Signup')} 
-        style = {styles.customLogIn}
-        
-        >
-          <Text style={styles.text}>Start Test</Text>
-        </TouchableOpacity>
+    <TouchableOpacity 
+  onPress={async () => {
+    await getQuestionById();
+    navigation.navigate('Signup');
+  }} 
+  style={styles.customLogIn}
+>
+  <Text style={styles.text}>Start Test</Text>
+</TouchableOpacity>
+
 
          <TouchableOpacity 
         onPress={() => 
