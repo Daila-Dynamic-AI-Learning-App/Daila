@@ -21,7 +21,7 @@ const NewUser = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigation = useNavigation();
-  
+
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       setError("Passwords don't match.");
@@ -31,19 +31,21 @@ const NewUser = () => {
       setError("Please fill in all required fields.");
       return;
     }
-    var data = qs.stringify({
-      'email': email,
-      'password': password,
-      'username': username,
-      'country': country, 
-    });
+
+    var data = {
+      email,
+      password,
+      username,
+      country
+    };
     var config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: 'https://daila.onrender.com/api/v1/register',
-      headers: { },
+      headers: { 'content-type': 'application/json' },
       data: data
     };
+
     try {
       const response = await axios(config);
       console.log(JSON.stringify(response.data));
@@ -57,13 +59,12 @@ const NewUser = () => {
       setError('Network error. Please try again later.');
     }
   };
-  
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
 return (
-
 <ScrollView>
   <View style={styles.container}>
 
@@ -106,8 +107,8 @@ return (
         keyboardType="email-address"
       />
     </View>
-    
-   
+
+
     <View style={styles.line} />
 
     <View style={styles.inputContainer}>
