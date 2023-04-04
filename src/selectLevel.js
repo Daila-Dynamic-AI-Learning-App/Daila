@@ -1,29 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 function LoginScreen() {
+  const [studyLevel, setStudyLevel] = useState("Elementary School");
+  const [topicOfInterest, setTopicOfInterest] = useState("Social Studies");
+  const [studyYear, setStudyYear] = useState("1st Grade");
+  const navigation = useNavigation();
 
-    const [levelOfStudy, setLevelOfStudy] = useState('');
-    const [interestedTopics, setInterestedTopics] = useState('');
-    const navigation = useNavigation();
-    
-
-    const elementarySchoolSubjects = [
-    'Social Studies',
-    'Science and Nature',
-    'Art and Music',
-    'Physical Education',
-    'Mathematics and Logic',
-    'Language Arts',
-    'Reading and Writing',
-    'Critical Thinking',
-    'Character Education',
+  const elementarySchoolSubjects = [
+    "Social Studies",
+    "Science and Nature",
+    "Art and Music",
+    "Physical Education",
+    "Mathematics and Logic",
+    "Language Arts",
+    "Reading and Writing",
+    "Critical Thinking",
+    "Character Education",
   ];
 
   const middleSchoolSubjects = [
@@ -107,42 +104,51 @@ function LoginScreen() {
       ? highSchoolSubjects
       : collegeSubjects;
 
-const handleSubmit = () => {
-  var qs = require('qs');
-  var data = qs.stringify({
-    studyLevel: levelOfStudy,
-    topicOfInterest: interestedTopics,
-    'studyYear': '1st year' 
-  });
-  var config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: 'https://daila.onrender.com/api/v1/study',
-    headers: { 
-      'X-Token': '61f194bd-f2dd-4e40-8937-4f825cde6a24'
-    },
-    data: data
-  };
+  const year =
+    studyLevel === "Elementary School"
+      ? elementarySchoolYear
+      : studyLevel === "Middle School"
+      ? middleSchoolYear
+      : studyLevel === "High School"
+      ? highSchoolYear
+      : collegeYear;
 
-  axios(config)
-    .then(async function (response) {
-      console.log(JSON.stringify(data))
-      console.log(JSON.stringify(response.data));
-      try {
-        await AsyncStorage.setItem('@studyId', response.data.studyId);
-        console.log('studyId stored successfully');
-      } catch (error) {
-        console.log('Error storing studyId: ', error);
-        const studyId = await AsyncStorage.getItem('studyId');
-        console.log('Study ID:', studyId);
+  // this function handles the onpress event of the next button
+  const handleSubmit = async () => {
+    // get saved token from the asyncstorage
+    const token = await AsyncStorage.getItem("token");
+
+    // create a data object to be sent to the server
+    const data = {
+      studyLevel,
+      topicOfInterest,
+      studyYear,
+    };
+
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://daila.onrender.com/api/v1/study",
+      headers: { "content-type": "application/json", "X-Token": token },
+      data: data,
+    };
+    
+    try {
+      const response = await axios(config);
+      const studyId = response.data.studyId;
+      console.log(studyId);
+      await AsyncStorage.setItem('studyId', studyId);
+      console.log(response.status);
+      if (response.status === 202) {
+        navigation.navigate("BellPrompt");
+      } else {
+        navigation.navigate("Home");
       }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
-
+    } catch (err) {
+      console.log(err.message);
+    }
+     
+  };
 
   return (
     <View style={styles.container}>

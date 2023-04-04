@@ -17,6 +17,7 @@ const NewUser = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -33,26 +34,24 @@ const NewUser = () => {
     }
 
     var data = {
-      email: email,
-      password: password,
-      username: username,
-      country: country,
+      email,
+      password,
+      username,
+      country,
     };
     var config = {
       method: "post",
       maxBodyLength: Infinity,
       url: "https://daila.onrender.com/api/v1/register",
-      headers: {},
-      data: qs.stringify(data),
+      headers: { "content-type": "application/json" },
+      data: data,
     };
 
     try {
-      console.log('Request Headers:', config.headers);
-      console.log('Request Body:', config.data);
       const response = await axios(config);
-      console.log(JSON.stringify(response.data))
-      if (response.data.message === 'success') {
-        navigation.navigate('Home');
+      console.log(JSON.stringify(response.data));
+      if (response.data.message === "success") {
+        navigation.navigate("Home");
       } else {
         setError(response.data.error || "Something went wrong.");
       }

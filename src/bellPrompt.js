@@ -15,21 +15,23 @@ function BellPrompt() {
     const [showWarning, setShowWarning] = useState(false);
     
     const getQuestionById = async () => {
-      
-      const studyId = await AsyncStorage.getItem('studyId');
-  
-      const config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: `https://daila.onrender.com/api/v1/question/${studyId}`,
-        headers: { 
-          'X-Token': 'f1fa2b39-bea7-4c4c-abf1-7c31503be0c5'
-        }
-      };
+    const studyId = await AsyncStorage.getItem('studyId');
+    console.log('studyId:', studyId);
+    const token = await AsyncStorage.getItem('token');
+    const config = {
+     method: 'get',
+      maxBodyLength: Infinity,
+     url: `https://daila.onrender.com/api/v1/question/${studyId}`,
+     headers: { 
+    'X-Token': token
+      }
+};
+
     
       
   try {
     setPrompt(''); 
+    console.log(config.url)
     const response = await axios(config);
     setPrompt(response.data.prompt);
     AsyncStorage.setItem('prompt', response.data.prompt);
@@ -50,7 +52,8 @@ function BellPrompt() {
     style={styles.logo}
     />
        <Text style={styles.welcome}>
-          This is an assessment test. Once you start you
+          This is an assessment test. 
+          Once you start you
           cannot interrupt it.
        </Text>
        </View>

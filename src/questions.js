@@ -3,11 +3,12 @@ import { View,
   Text, 
   StyleSheet, 
   Button, 
-  TextInput, 
   KeyboardAvoidingView, 
   ScrollView,  
-  Platform,
-  TouchableOpacity, 
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  ActivityIndicator, 
   Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
@@ -15,11 +16,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
-/*
-function WarningDialog({ onConfirm, onCancel }) {
+
+/*function WarningDialog({ onConfirm, onCancel }) {
   const text = 'Your progress will be lost if you cancel your work';
   const navigation = useNavigation();
-
   return (
         <View style={styles.popUp}>
         <View style={styles.background}>
@@ -66,15 +66,16 @@ function WarningDialog({ onConfirm, onCancel }) {
   );
     
 }
-*/
 
+*/
 function SignupScreen() {
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(1);
   const [questions, setQuestions] = useState([]);
   const [answerInput, setAnswerInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showWarning, setShowWarning] = useState(false);
   const [prompt, setPrompt] = useState('');
+  const [promptEnd, setPromptEnd] = useState('');
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -87,38 +88,62 @@ function SignupScreen() {
     loadPrompt();
   }, []);
 
+  const isValidAnswer = (answerInput) => {
+    const regex = /^[a-zA-Z\s]+$/;
+    return regex.test(answerInput);
+  }
+  
+
   const handleAnswerSubmit = async () => {
+    if (answerInput.trim() === '') {
+        alert('Please enter a valid response.');
+        return;
+    }
+    
+    setIsLoading(true);
+    
     const studyId = await AsyncStorage.getItem('studyId');
-    var config = {
-      method: 'get',
-      maxBodyLength: Infinity,
+    const token = await AsyncStorage.getItem('token');
+    
+    const data = JSON.stringify({
+      answer: answerInput
+    });
+    const config = {
+      method: 'put',
       url: `https://daila.onrender.com/api/v1/question/${studyId}`,
       headers: { 
-        'X-Token': 'f1fa2b39-bea7-4c4c-abf1-7c31503be0c5'
-      }
+        'X-Token': token,
+        'Content-Type': 'application/json'
+      },
+      data: data,
+      maxBodyLength: Infinity
     };
+    console.log(config.url);
+    console.log(config.headers);
   
     try {
-      const response = await axios(config);
-      console.log(`Status: ${response.status}`);
-      console.log(`Prompt: ${response.data.prompt}`);
-      setQuestions(response.data.questions);
-      setIsLoading(false);
-      if (response.data.end) {
-        navigation.navigate('Answers');
-      } else {
-        setPrompt(response.data.prompt);
+        const response = await axios(config);
+        console.log(response.status); // log the HTTP status code
+        console.log(response.data); // log the value of end
+        console.log(response.data.prompt);
+        console.log(response.data.end); // log the value of end  
+        setQuestions(response.data.questions);
+        setIsLoading(false);
         setAnswerInput('');
-        setQuestionIndex(questionIndex + 1);
-      }
+        if (response.data.end) {  
+          await AsyncStorage.setItem('promptEnd', response.data.prompt);
+            navigation.navigate('Answers');
+        } else { 
+            setPrompt(response.data.prompt);
+            setQuestionIndex(questionIndex + 1);
+        }
     } catch (error) {
-      console.log(error);
-      setShowWarning(true);
+        console.log(error);
+        setIsLoading(false);
+        setShowWarning(true);
     }
   };
   
-  
-
   const handleCancelPress = () => {
     setShowWarning(true);
   };
@@ -129,46 +154,44 @@ function SignupScreen() {
   //0559340134
   return (    
 
-      <KeyboardAvoidingView>
-        <ScrollView>
-       
+    <KeyboardAvoidingView>
+    <ScrollView>
+
       <View style={[styles.container, styles.content,  { zIndex: 0 }]}>
 
-        
-      <View style={styles.subContainerB}>
-                <Text style={styles.welcome}>{prompt}</Text>
-      </View>
-          
-        <View style={styles.queNoContainer}>
-         <View style={styles.queRoundContainer}>
-          <Text style={styles.numInRound}>1</Text>
+        <View style={styles.subContainerB}>
+          <Text style={styles.welcome}>{prompt}</Text>
         </View>
 
+        <View style={styles.queNoContainer}>
+          <View style={styles.queRoundContainer}>
+            <Text style={styles.numInRound}>{questionIndex}</Text>
+          </View>
         </View>
 
         <View style={styles.inputContainer}>
-        <TextInput 
-          style={styles.answerInput}
-          placeholder="Enter Answer"
-          value={answerInput}
-          multiline={true}
-          onChangeText={(text) => setAnswerInput(text)}
-        />     
-        <Button title='>>' onPress={handleAnswerSubmit} />
+          <TextInput 
+            style={styles.answerInput}
+            placeholder="Enter Answer"
+            value={answerInput}
+            multiline={true}
+            onChangeText={(text) => setAnswerInput(text)}
+          />     
+          <Button title='>>' onPress={handleAnswerSubmit} />
         </View>
 
-      <TouchableOpacity onPress={handleCancelPress}>
-        <View style={styles.cancelContainer}>
-        <View style={styles.numContainer}> 
-           <Text style={styles.xxx}>X</Text>
-        </View>
-      </View> 
-      </TouchableOpacity>    
-      
+        <TouchableOpacity onPress={handleCancelPress}>
+          <View style={styles.cancelContainer}>
+            <View style={styles.numContainer}> 
+              <Text style={styles.xxx}>X</Text>
+            </View>
+          </View> 
+        </TouchableOpacity>    
 
-    </View>
-  </ScrollView> 
-    </KeyboardAvoidingView>
+
+      </View>
+    </ScrollView> 
+  </KeyboardAvoidingView>
      
     );
 }

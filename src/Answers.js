@@ -1,23 +1,26 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function CheckingAnswers() {
+  const [promptEnd, setPromptEnd] = useState('');
 
-return (
+  useEffect(() => {
+    const loadPrompt = async () => {
+      const promptEnd = await AsyncStorage.getItem('promptEnd');
+      if (promptEnd) {
+        setPromptEnd(promptEnd);
+      }
+    };
+    loadPrompt();
+  }, []);
+  return (
     <View style={styles.container}>
       <View style={styles.subContainerB}>
-
         <Text style={styles.welcome}>
-        Based on your responses, it seems that you have a strong foundation in algebra and geometry, but you struggle with calculus and trigonometry.{"\n"}
-Review Algebra: You can use Khan Academy's Algebra I and Algebra II courses to review important topics.{"\n"}
-Practice Calculus:  You can start by reviewing the basics of derivatives and integrals using Khan Academy's Calculus I course. {"\n"}
-Combine Algebra and Calculus: Khan Academy's Calculus II course covers topics such as limits, series, and sequences that require algebraic manipulation.{"\n"}
-Seek Help When Needed: Online forums such as Reddit's r/math and math.stackexchange.com can also be great resources for getting answers to specific questions.{"\n"}
-Remember to practice problems and repetition to solidify your understanding of the material.
-        Good luck on your math journey!
+          {promptEnd}
         </Text>
       </View>
-
     </View>
   );
 }
@@ -59,7 +62,7 @@ Remember to practice problems and repetition to solidify your understanding of t
      },
 
         welcome: {
-      color: '#0bdc9f',
+      color: '#f5f5f5',
       fontSize: 16.5,
       fontWeight: 'bold',
       fontStyle: 'normal',
