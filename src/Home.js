@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -22,6 +23,11 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error","Please fill in all required fields.");
+      return;
+    }
+
     var data = {
       email,
       password,
@@ -47,7 +53,11 @@ function HomeScreen() {
       navigation.navigate("Login");
     } catch (error) {
       console.error(error);
-      setError("Invalid email or password");
+      if (error.response && error.response.status === 400) {
+        Alert.alert("Error", "Username and password do not match.");
+      } else {
+        setError("Network error. Please try again later.");
+      }
     }
   };
 

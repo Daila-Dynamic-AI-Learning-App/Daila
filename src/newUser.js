@@ -7,22 +7,93 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Modal,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-import qs from "qs";
 import { useNavigation } from "@react-navigation/native";
+import LinearGradient from 'react-native-linear-gradient';
+
+
 
 const NewUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
+  const [country, setCountry] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+
   const navigation = useNavigation();
 
+  const COUNTRIES = [
+    { name: "Afghanistan", code: "AF" },
+{ name: "Albania", code: "AL" },
+{ name: "Algeria", code: "DZ" },
+{ name: "Andorra", code: "AD" },
+{ name: "Angola", code: "AO" },
+{ name: "Antigua and Barbuda", code: "AG" },
+{ name: "Argentina", code: "AR" },
+{ name: "Armenia", code: "AM" },
+{ name: "Australia", code: "AU" },
+{ name: "Austria", code: "AT" },
+{ name: "Azerbaijan", code: "AZ" },
+{ name: "Bahamas", code: "BS" },
+{ name: "Bahrain", code: "BH" },
+{ name: "Bangladesh", code: "BD" },
+{ name: "Barbados", code: "BB" },
+{ name: "Belarus", code: "BY" },
+{ name: "Belgium", code: "BE" },
+{ name: "Belize", code: "BZ" },
+{ name: "Benin", code: "BJ" },
+{ name: "Bhutan", code: "BT" },
+{ name: "Bolivia", code: "BO" },
+{ name: "Bosnia and Herzegovina", code: "BA" },
+{ name: "Botswana", code: "BW" },
+{ name: "Brazil", code: "BR" },
+{ name: "Brunei", code: "BN" },
+{ name: "Bulgaria", code: "BG" },
+{ name: "Burkina Faso", code: "BF" },
+{ name: "Burundi", code: "BI" },
+{ name: "Cambodia", code: "KH" },
+{ name: "Cameroon", code: "CM" },
+{ name: "Canada", code: "CA" },
+{ name: "Cape Verde", code: "CV" },
+{ name: "Central African Republic", code: "CF" },
+{ name: "Chad", code: "TD" },
+{ name: "Chile", code: "CL" },
+{ name: "China", code: "CN" },
+{ name: "Colombia", code: "CO" },
+{ name: "Comoros", code: "KM" },
+{ name: "Congo", code: "CG" },
+{ name: "Costa Rica", code: "CR" },
+{ name: "Croatia", code: "HR" },
+{ name: "Cuba", code: "CU" },
+{ name: "Cyprus", code: "CY" },
+{ name: "Czech Republic", code: "CZ" },
+{ name: "Denmark", code: "DK" },
+{ name: "Djibouti", code: "DJ" },
+{ name: "Dominica", code: "DM" },
+{ name: "Dominican Republic", code: "DO" },
+{ name: "East Timor", code: "TL" },
+{ name: "Ecuador", code: "EC" },
+{ name: "Egypt", code: "EG" },
+{ name: "El Salvador", code: "SV" },
+{ name: "Equatorial Guinea", code: "GQ" },
+{ name: "Eritrea", code: "ER" },
+{ name: "Estonia", code: "EE" },
+
+    // Add more countries here
+  ];
+  
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  
+  const handleCountrySelect = () => {
+    setShowPicker(false);
+    setCountry(selectedCountry.name);
+  };
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       setError("Passwords don't match.");
@@ -50,6 +121,7 @@ const NewUser = () => {
     try {
       const response = await axios(config);
       console.log(JSON.stringify(response.data));
+      console.log(data);
       if (response.data.message === "success") {
         navigation.navigate("Home");
       } else {
@@ -79,19 +151,58 @@ const NewUser = () => {
             />
           </View>
 
-          <View style={styles.inputContainer}>
+          <TouchableOpacity
+            style={[styles.inputContainer, styles.pickerContainer]}
+            onPress={() => setShowPicker(true)}
+          >
             <Image
               source={require("./assets/flag-icon.png")}
               style={styles.icon}
             />
-
-            <TextInput
-              style={styles.inputt}
-              placeholder="Enter your country"
-              value={country}
-              onChangeText={setCountry}
+            <Text style={styles.pickerText}>
+              {selectedCountry ? selectedCountry : "Select your country"}
+            </Text>
+            <Image
+              source={require("./assets/arrow.png")}
+              style={styles.icon}
             />
-          </View>
+          </TouchableOpacity>
+
+          <Modal visible={showPicker} animationType="slide">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeader}>
+                <TouchableOpacity onPress={() => setShowPicker(false)}>
+              
+                </TouchableOpacity>
+                <Text style={styles.modalHeaderText}>Select your country</Text>
+                <View style={styles.modalHeaderRight}>
+                  <TouchableOpacity onPress={() => setShowPicker(false)}>
+                    <Text style={styles.modalHeaderButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleCountrySelect()}>
+                    <Text style={styles.modalHeaderButtonText}>Select</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={selectedCountry}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedCountry(itemValue)
+                  }
+                >
+                  {COUNTRIES.map((country) => (
+                    <Picker.Item
+                      key={country.code}
+                      label={`${country.name} (${country.code})`}
+                      value={country.code}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+          </Modal>
+
 
           <View style={styles.inputContainer}>
             <Image source={require("./assets/gMail.png")} style={styles.icon} />
@@ -169,6 +280,7 @@ const NewUser = () => {
 };
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
   },
@@ -182,6 +294,61 @@ const styles = StyleSheet.create({
   boxx: {
     marginTop: 80,
   },
+  picker: {
+      flex: 1,
+      width: "100%",
+     // or whatever height you prefer
+  }
+,  
+modalContainer: {
+  flex: 1, 
+  justifyContent: 'center',
+  backgroundColor: '#808080',
+  padding: 20,
+  },
+
+  modalHeader: {
+    backgroundColor: "#eee",
+    height: 60,
+
+    alignItems: "center",
+    flexDirection: "row",
+    paddingLeft: 7,
+    paddingRight: 3,
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  
+
+modalHeaderText: {
+  fontSize: 20,
+  fontWeight: "bold",
+  textAlign: "center",
+  flex: 1,
+},
+
+modalHeaderRight: {
+  flexDirection: "row",
+},
+
+modalHeaderButtonText: {
+  fontSize: 16,
+  marginLeft: 10,
+  marginRight: 10,
+  color: "#0DA57A",
+},
+
+pickerText: {
+  flex: 1,
+  fontSize: 16,
+  color: "#555",
+},
+
 
   inputContainer: {
     padding: 10,
@@ -261,6 +428,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 40,
   },
+  pickerContainer: {
+    backgroundColor: "white",
+    marginTop: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    marginLeft: 20,
+    marginRight: 20,
+  }
+  
 });
 
 export default NewUser;
