@@ -20,7 +20,7 @@ const NewUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [country, setCountry] = useState(null);
+  const [country, setCountry] = useState('');
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -91,15 +91,17 @@ const NewUser = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   
   const handleCountrySelect = () => {
+    setCountry(selectedCountry);
     setShowPicker(false);
-    setCountry(selectedCountry.name);
   };
+  
+  
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       setError("Passwords don't match.");
       return;
     }
-    if (!email || !password || !username || !country) {
+    if (!email || !password || !username) {
       setError("Please fill in all required fields.");
       return;
     }
@@ -108,7 +110,7 @@ const NewUser = () => {
       email,
       password,
       username,
-      country,
+      country
     };
     var config = {
       method: "post",
@@ -121,7 +123,7 @@ const NewUser = () => {
     try {
       const response = await axios(config);
       console.log(JSON.stringify(response.data));
-      console.log(data);
+      
       if (response.data.message === "success") {
         navigation.navigate("Home");
       } else {
@@ -129,6 +131,7 @@ const NewUser = () => {
       }
     } catch (error) {
       console.error(error);
+      console.log(config.data);
       setError("Network error. Please try again later.");
     }
   };
@@ -152,21 +155,22 @@ const NewUser = () => {
           </View>
 
           <TouchableOpacity
-            style={[styles.inputContainer, styles.pickerContainer]}
-            onPress={() => setShowPicker(true)}
-          >
-            <Image
-              source={require("./assets/flag-icon.png")}
-              style={styles.icon}
-            />
-            <Text style={styles.pickerText}>
-              {selectedCountry ? selectedCountry : "Select your country"}
-            </Text>
-            <Image
-              source={require("./assets/arrow.png")}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
+  style={[styles.inputContainer, styles.pickerContainer]}
+  onPress={() => setShowPicker(true)}
+>
+  <Image
+    source={require("./assets/flag-icon.png")}
+    style={styles.icon}
+  />
+  <Text style={styles.pickerText}>
+    {country ? country : "Select your country"}
+  </Text>
+  <Image
+    source={require("./assets/arrow.png")}
+    style={styles.icon}
+  />
+</TouchableOpacity>
+
 
           <Modal visible={showPicker} animationType="slide">
             <View style={styles.modalContainer}>
@@ -187,7 +191,7 @@ const NewUser = () => {
               <View style={styles.pickerContainer}>
                 <Picker
                   selectedValue={selectedCountry}
-                  onValueChange={(itemValue, itemIndex) =>
+                  onValueChange={(itemValue) =>
                     setSelectedCountry(itemValue)
                   }
                 >
@@ -195,7 +199,7 @@ const NewUser = () => {
                     <Picker.Item
                       key={country.code}
                       label={`${country.name} (${country.code})`}
-                      value={country.code}
+                      value={country.name}
                     />
                   ))}
                 </Picker>
