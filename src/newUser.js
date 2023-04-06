@@ -9,6 +9,7 @@ import {
   ScrollView,
   Modal,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
@@ -238,11 +239,11 @@ const NewUser = () => {
   
   const handleSignup = async () => {
     if (password !== confirmPassword) {
-      setError("Passwords don't match.");
+      Alert.alert("😵‍💫 Error","Passwords don't match.");
       return;
     }
     if (!email || !password || !username) {
-      setError("Please fill in all required fields.");
+      Alert.alert("🤨 Error","Please fill in all required fields.");
       return;
     }
     setLoading(true);
@@ -596,20 +597,7 @@ pickerText: {
     alignItems: "center",
     height: 40,
   },
-  pickerContainer: {
-    backgroundColor: "white",
-    marginTop: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-    marginLeft: 20,
-    marginRight: 20,
-  }
+  
   
 });
 

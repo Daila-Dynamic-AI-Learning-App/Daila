@@ -25,7 +25,7 @@ function HomeScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error","Please fill in all required fields.");
+      Alert.alert("🤨 Error","Please fill in all required fields.");
       return;
     }
     setLoading(true);
@@ -55,7 +55,7 @@ function HomeScreen() {
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 400) {
-        Alert.alert("Error", "Username and password do not match.");
+        Alert.alert("😵‍💫 Error", "Username and password do not match.");
       } else {
         setError("Network error. Please try again later.");
       }

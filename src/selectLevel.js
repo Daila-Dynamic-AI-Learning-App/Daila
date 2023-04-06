@@ -16,8 +16,8 @@ function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleLevelSelect = () => {
-    if (studyLevel === "Select a level of education") {
-      Alert.alert("Wait a second...","Please select a valid level of education");
+    if (studyLevel === "Select your level of education") {
+      Alert.alert("🤨 Wait a second...","Please select a valid level of education");
     } else {
       setStudyLevel(studyLevel);
       setShowPicker(false);
@@ -26,7 +26,7 @@ function LoginScreen() {
   
   const handleSubjectSelect = () => {
     if (topicOfInterest === "Select your topic") {
-      Alert.alert("Wait a second...","Please select a valid topic");
+      Alert.alert("🤨 Wait a second...","Please select a valid topic");
     } else {
       setTopicOfInterest(topicOfInterest);
       setShowPicker3(false);
@@ -34,7 +34,7 @@ function LoginScreen() {
   };
   const handleYearSelect = () => {
     if (studyYear === "Select your school year") {
-      Alert.alert("Please select a valid school year.");
+      Alert.alert("🤨 Wait a second...","Please select a valid school year.");
     } else {
       setStudyYear(studyYear);
       setShowPicker2(false);
@@ -174,21 +174,26 @@ function LoginScreen() {
       data: data,
     };
     
-    try {
-      console.log(config.data);
-      const response = await axios(config);
-      const studyId = response.data.studyId;
-      console.log(studyId);
-      await AsyncStorage.setItem('studyId', studyId);
-      console.log(response.status);
-      if (response.status === 202) {
-        navigation.navigate("BellPrompt");
-      } else {
-        navigation.navigate("Home");
+    if (studyLevel === "Select your level of education" || topicOfInterest === "Select your topic" || studyYear === "Select your school year") {
+      Alert.alert("🤨 Wait a second...","Please fill all the fields correctly");
+    } else {
+      try {
+        console.log(config.data);
+        const response = await axios(config);
+        const studyId = response.data.studyId;
+        console.log(studyId);
+        await AsyncStorage.setItem('studyId', studyId);
+        console.log(response.status);
+        if (response.status === 202) {
+          navigation.navigate("BellPrompt");
+        } else {
+          navigation.navigate("Home");
+        }
+      } catch (err) {
+        console.log(err.message);
       }
-    } catch (err) {
-      console.log(err.message);
     }
+    
      
   };
   
@@ -232,7 +237,7 @@ function LoginScreen() {
                   selectedValue={studyLevel}
                   onValueChange={(itemValue) => setStudyLevel(itemValue)}
                 >
-                   <Picker.Item label="Select a level of education" value="Select a level of education" />
+                   <Picker.Item label="Select your level of education" value="Select your level of education" />
                   <Picker.Item label="Elementary School" value="Elementary School" />
                   <Picker.Item label="Middle School" value="Middle School" />
                   <Picker.Item label="High School" value="High School" />
