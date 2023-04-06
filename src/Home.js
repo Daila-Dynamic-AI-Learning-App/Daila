@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -19,15 +20,15 @@ function HomeScreen() {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error","Please fill in all required fields.");
       return;
     }
-
+    setLoading(true);
     var data = {
       email,
       password,
@@ -59,6 +60,8 @@ function HomeScreen() {
         setError("Network error. Please try again later.");
       }
     }
+    finally {
+      setLoading(false);}
   };
 
   const toggleShowPassword = () => {
@@ -74,6 +77,7 @@ function HomeScreen() {
           <Text style={styles.subtitle}>Your Dynamic AI Learning App</Text>
         </View>
 
+       
         <KeyboardAvoidingView>
           <View style={styles.inputContainer}>
             <Image source={require("./assets/gMail.png")} style={styles.icon} />
@@ -85,6 +89,14 @@ function HomeScreen() {
               onChangeText={(text) => setEmail(text)}
             />
           </View>
+          <View style={styles.containerload}>
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
+
+    </View>
 
           <View style={styles.inputContainer}>
             <Image
@@ -201,6 +213,17 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 999,
   },
 
   subtitleB: {
