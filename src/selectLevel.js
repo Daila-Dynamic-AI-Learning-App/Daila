@@ -44,84 +44,215 @@ function LoginScreen() {
 
   const elementarySchoolSubjects = [
     "Select your topic",
-    "Social Studies",
-    "Science and Nature",
-    "Art and Music",
-    "Physical Education",
-    "Mathematics and Logic",
-    "Language Arts",
-    "Reading and Writing",
-    "Critical Thinking",
-    "Character Education",
+    "Math",
+"Language Arts",
+"Science",
+"Social Studies",
+"Physical Education",
+"Health Education",
+"Music",
+"Art",
+"Drama",
+"Technology Education",
+"French Language",
+"Spanish Language",
+"Writing",
+"Spelling",
+"Handwriting",
+"Geography",
+"History",
+"Civics",
+"Character Education",
+"Environmental Studies",
+"Computer Science",
+"Library Science",
+"Media Literacy"
   ];
 
   const middleSchoolSubjects = [
     "Select your topic",
-    "History and Geography",
-    "Earth and Space Science",
+    "Space Science",
     "Life Science",
-    "Physical Science",
-    "Foreign Languages",
-    "Computer Science",
-    "Health and Wellness",
-    "Creative Writing",
-    "Journalism",
+"Mathematics",
+"Language Arts",
+"Science",
+"Social Studies",
+"Physical Education",
+"Health Education",
+"Music",
+"Art",
+"Drama",
+"Technology Education",
+"French Language",
+"Spanish Language",
+"Latin Language",
+"Writing",
+"Spelling",
+"Handwriting",
+"Grammar",
+"Vocabulary",
+"Literature",
+"Creative Writing",
+"Debate",
+"Critical Thinking",
+"Study Skills",
+"Geography",
+"History",
+"Civics",
+"Economics",
+"Environmental Studies",
+"Media Literacy"
   ];
 
   const highSchoolSubjects = [
     "Select your topic",
-    "Mathematics and Statistics",
-    "Science and Engineering",
-    "Social Sciences",
-    "Arts and Humanities",
-    "Business",
-    "Communications and Journalism",
-    "Computer Science and Information Technology",
-    "Education",
-    "Health and Wellness",
-    "Law and Public Policy",
-  ];
-
-  const collegeSubjects = [
-    "Select your topic",
-    "Anthropology",
+    "Mathematics",
+    "Algebra",
+    "Geometry",
+    "Calculus",
+    "Statistics",
+    "Trigonometry",
     "Biology",
     "Chemistry",
-    "Computer Science",
-    "Economics",
-    "Education",
-    "Engineering",
-    "English",
-    "Geography",
-    "History",
-    "Law",
-    "Mathematics",
-    "Medicine",
-    "Philosophy",
     "Physics",
-    "Psychology",
-    "Sociology",
+    "Environmental Science",
+    "Anatomy and Physiology",
+    "Forensic Science",
+    "Earth Science",
+    "Astronomy",
+    "Computer Science",
+    "Web Development",
+    "Mobile App Development",
+    "Art",
+    "Music",
+    "Drama",
+    "Film Studies",
+    "Literature",
+    "Creative Writing",
+    "Journalism",
+    "History",
+    "World History",
+    "Universal History",
+    "Government",
+    "Economics",
+    "Psychology"
   ];
 
+  const collegeSubjects = 
+    [ "Select your topic", 
+        "Accounting",  
+      "Aerospace Engineering", 
+      "Agricultural Business and Management",
+        "Agricultural Economics", 
+          "Agricultural Engineering", 
+          "Agriculture", 
+            "Animal Sciences",  
+            "Anthropology", 
+            "Applied Mathematics", 
+              "Architecture", 
+              "Art History",  
+              "Biochemistry", 
+                "Biology", 
+                "Biomedical Engineering", 
+                  "Business Administration and Management",  
+                  "Chemical Engineering",  
+                  "Chemistry",  
+                  "Civil Engineering", 
+                  "Clinical Psychology", 
+                    "Communications", 
+                    "Computer Engineering", 
+                      "Computer Science",  
+                      "Criminal Justice",  
+                      "Dental Hygiene", 
+                      "Dentistry", 
+                        "Early Childhood Education", 
+                        "Economics", 
+                          "Education", 
+                          "Electrical Engineering",  
+                          "Elementary Education",  
+                          "Engineering", 
+                            "English", 
+                            "Environmental Science",  
+                            "Environmental Studies",  
+                            "Fashion Design", 
+                              "Film and Video", 
+                              "Finance", 
+                              "Fine Arts", 
+                                "Food Science", 
+                                "Foreign Languages and Literatures",  
+                                "Forensic Science",  
+                                "Geography",  
+                                "Geology",  
+                                "Graphic Design",  
+                                "Health and Physical Education", 
+                                  "Health Sciences", 
+                                  "History",  
+                                  "Hospitality Management",  
+                                  "Human Resources Management", 
+                                    "Industrial Engineering",  
+                                    "Information Science",  
+                                    "Information Technology",  
+                                    "International Business",  
+                                    "Journalism",  
+                                    "Landscape Architecture",  
+                                    "Law",  
+                                    "Liberal Arts and Sciences",  
+                                    "Linguistics",  
+                                    "Management Information Systems",  
+                                    "Marketing",  
+                                    "Materials Science and Engineering",  
+                                    "Mathematics",  
+                                    "Mechanical Engineering",  
+                                    "Medical Laboratory Science",  
+                                    "Medicine",  
+                                    "Music",  
+                                    "Nursing",  
+                                    "Nutrition and Dietetics",  
+                                    "Occupational Therapy",  
+                                    "Operations Management",  
+                                    "Optometry",  
+                                    "Pharmacy",  
+                                    "Philosophy",  
+                                    "Physical Therapy",  
+                                    "Physics", 
+                                    "Political Science",  
+                                    "Psychology",  
+                                    "Public Health",  
+                                    "Public Relations",  
+                                    "Real Estate",  
+                                    "Social Work",  
+                                    "Sociology",  
+                                    "Software Engineering",  
+                                    "Special Education", 
+                                      "Sports Management",  
+                                      "Statistics",  
+                                      "Supply Chain Management",  
+                                      "Sustainability Studies",  
+                                      "Theater",  
+                                      "Urban Planning",  
+                                      "Veterinary Medicine",  
+                                      "Web Design and Development",
+        "Women's Studies"]
+
+  ;
+
   const elementarySchoolYear = [
-    "Select your school year",
-    "Kindergarten", 
-    "Nursery"];
-  const middleSchoolYear = [
     "Select your school year",
     "Grade 1",
     "Grade 2",
     "Grade 3",
     "Grade 4",
     "Grade 5",
-    "Grade 6",
-  ];
-
-  const highSchoolYear = [
+    "Grade 6",];
+  const middleSchoolYear = [
     "Select your school year",
     "Grade 7",
     "Grade 8",
     "Grade 9",
+  ];
+
+  const highSchoolYear = [
+    "Select your school year",
     "Grade 10",
     "Grade 11",
     "Grade 12",
@@ -134,6 +265,7 @@ function LoginScreen() {
     "3rd year",
     "4th year",
     "5th year",
+    "6th year",
   ];
 
   const subjects =
@@ -215,7 +347,7 @@ function LoginScreen() {
             style={[styles.inputContainer, styles.pickerContainer]}
             onPress={() => setShowPicker(true)}>
             <Image
-              source={require("./assets/flag-icon.png")}
+              source={require("./assets/levelEducation.png")}
               style={styles.icon} />
             <Text style={styles.pickerText}>
               {studyLevel ? studyLevel : "Select your level of education"}
@@ -259,7 +391,7 @@ function LoginScreen() {
                 onPress={() => setShowPicker2(true)}
               >
                 <Image
-                  source={require("./assets/flag-icon.png")}
+                  source={require("./assets/year.png")}
                   style={styles.icon} />
                 <Text style={styles.pickerText}>
                   {studyYear ? studyYear : "Select your year"}
@@ -305,7 +437,7 @@ function LoginScreen() {
                 onPress={() => setShowPicker2(true)}
               >
                 <Image
-                  source={require("./assets/flag-icon.png")}
+                  source={require("./assets/year.png")}
                   style={styles.icon} />
                 <Text style={styles.pickerText}>
                   {studyYear ? studyYear : "Select your year"}
@@ -351,7 +483,7 @@ function LoginScreen() {
                 onPress={() => setShowPicker2(true)}
               >
                 <Image
-                  source={require("./assets/flag-icon.png")}
+                  source={require("./assets/year.png")}
                   style={styles.icon} />
                 <Text style={styles.pickerText}>
                   {studyYear ? studyYear : "Select your year"}
@@ -399,7 +531,7 @@ function LoginScreen() {
                 onPress={() => setShowPicker2(true)}
               >
                 <Image
-                  source={require("./assets/flag-icon.png")}
+                  source={require("./assets/year.png")}
                   style={styles.icon} />
                 <Text style={styles.pickerText}>
                   {studyYear ? studyYear : "Select your year"}
@@ -453,7 +585,7 @@ function LoginScreen() {
               onPress={() => setShowPicker3(true)}
             >
               <Image
-                source={require("./assets/flag-icon.png")}
+                source={require("./assets/topic.png")}
                 style={styles.icon} />
               <Text style={styles.pickerText}>
                 {topicOfInterest ? topicOfInterest : "Select your topic of interest"}
@@ -499,7 +631,7 @@ function LoginScreen() {
               onPress={() => setShowPicker3(true)}
             >
               <Image
-                source={require("./assets/flag-icon.png")}
+                source={require("./assets/topic.png")}
                 style={styles.icon} />
               <Text style={styles.pickerText}>
                 {topicOfInterest ? topicOfInterest : "Select your topic"}
@@ -545,7 +677,7 @@ function LoginScreen() {
               onPress={() => setShowPicker3(true)}
             >
               <Image
-                source={require("./assets/flag-icon.png")}
+                source={require("./assets/topic.png")}
                 style={styles.icon} />
               <Text style={styles.pickerText}>
                 {topicOfInterest ? topicOfInterest : "Select your topic"}
@@ -591,7 +723,7 @@ function LoginScreen() {
               onPress={() => setShowPicker3(true)}
             >
               <Image
-                source={require("./assets/flag-icon.png")}
+                source={require("./assets/topic.png")}
                 style={styles.icon} />
               <Text style={styles.pickerText}>
                 {topicOfInterest ? topicOfInterest : "Select your topic"}
