@@ -67,6 +67,13 @@ function HomeScreen() {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  function showPasswordRecoveryAlert() {
+    Alert.alert(
+      '😢 Password Recovery Unavailable',
+      'We are sorry to inform you that the password recovery feature is currently unavailable, but we are working on bringing it back as soon as possible. Thank you for your patience!',
+      [{ text: 'OK' }]
+    );
+  }
 
   return (
     <View>
@@ -124,7 +131,7 @@ function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={showPasswordRecoveryAlert}>
             <Text style={styles.subtitleB}>Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleLogin} style={styles.customLogIn}>
