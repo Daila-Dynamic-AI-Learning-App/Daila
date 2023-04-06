@@ -156,6 +156,7 @@ function LoginScreen() {
 
   // this function handles the onpress event of the next button
   const handleSubmit = async () => {
+    setLoading(true);
     // get saved token from the asyncstorage
     const token = await AsyncStorage.getItem("token");
 
@@ -192,7 +193,10 @@ function LoginScreen() {
       } catch (err) {
         console.log(err.message);
       }
+      finally {
+        setLoading(false);}
     }
+    
     
      
   };
@@ -246,7 +250,7 @@ function LoginScreen() {
               </View>
             </View>
           </Modal>
-
+          
 
           {studyLevel === "Elementary School" ? (
             <>
@@ -629,11 +633,18 @@ function LoginScreen() {
         ) :
          null}
       </View>
-    </View><View>
+    </View>
+    {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
+    <View>
         <TouchableOpacity onPress={handleSubmit} style={styles.customLogIn}>
           <Text style={styles.text2}>NEXT</Text>
         </TouchableOpacity>
       </View></>
+      
   )  
 }
 

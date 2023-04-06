@@ -69,6 +69,12 @@ function HomeScreen() {
   };
 
   return (
+    <View>
+       {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.subContainer}>
@@ -90,11 +96,6 @@ function HomeScreen() {
             />
           </View>
           <View style={styles.containerload}>
-      {loading && (
-        <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#0bdc9f" />
-        </View>
-      )}
 
     </View>
 
@@ -122,7 +123,7 @@ function HomeScreen() {
               />
             </TouchableOpacity>
           </View>
-
+          
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.subtitleB}>Forgot Password?</Text>
           </TouchableOpacity>
@@ -141,7 +142,9 @@ function HomeScreen() {
           </View>
         </KeyboardAvoidingView>
       </View>
+    
     </ScrollView>
+    </View>
   );
 }
 

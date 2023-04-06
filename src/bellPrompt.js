@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,13 +11,14 @@ function BellPrompt() {
     const [questionIndex, setQuestionIndex] = useState(0);
     const [answerInput, setAnswerInput] = useState('');
     const [prompt, setPrompt] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
     
     const getQuestionById = async () => {
     const studyId = await AsyncStorage.getItem('studyId');
     console.log('studyId:', studyId);
     const token = await AsyncStorage.getItem('token');
+    setLoading(true);
     const config = {
      method: 'get',
       maxBodyLength: Infinity,
@@ -25,6 +26,7 @@ function BellPrompt() {
      headers: { 
     'X-Token': token
       }
+      
 };
 
     
@@ -35,12 +37,13 @@ function BellPrompt() {
     const response = await axios(config);
     setPrompt(response.data.prompt);
     AsyncStorage.setItem('prompt', response.data.prompt);
-    setIsLoading(false);
     console.log('Request was successful!');
   } catch (error) {
     console.log(error);
     setShowWarning(true);
   } 
+  finally {
+    setLoading(false);}
 };
 
   return (
@@ -51,6 +54,7 @@ function BellPrompt() {
         <Image source={require('./assets/bell2.png')}
     style={styles.logo}
     />
+    
        <Text style={styles.welcome}>
           This is an assessment test. 
           Once you start you
@@ -59,7 +63,11 @@ function BellPrompt() {
        </View>
       
     </View>
-
+    {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
     <TouchableOpacity 
   onPress={async () => {
     await getQuestionById();
@@ -161,6 +169,17 @@ function BellPrompt() {
       marginTop: -10,
       width: '100%'
     },
+    overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 999,
+  },
 
 
 })

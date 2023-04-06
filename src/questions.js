@@ -7,7 +7,7 @@ import { View,
   ScrollView,  
   TextInput,
   TouchableOpacity,
-  Modal,
+  Alert,
   ActivityIndicator, 
   Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -72,7 +72,7 @@ function SignupScreen() {
   const [questionIndex, setQuestionIndex] = useState(1);
   const [questions, setQuestions] = useState([]);
   const [answerInput, setAnswerInput] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [promptEnd, setPromptEnd] = useState('');
@@ -100,7 +100,7 @@ function SignupScreen() {
         return;
     }
     
-    setIsLoading(true);
+    setLoading(true);
     
     const studyId = await AsyncStorage.getItem('studyId');
     const token = await AsyncStorage.getItem('token');
@@ -128,7 +128,6 @@ function SignupScreen() {
         console.log(response.data.prompt);
         console.log(response.data.end); // log the value of end  
         setQuestions(response.data.questions);
-        setIsLoading(false);
         setAnswerInput('');
         if (response.data.end) {  
           await AsyncStorage.setItem('promptEnd', response.data.prompt);
@@ -139,18 +138,30 @@ function SignupScreen() {
         }
     } catch (error) {
         console.log(error);
-        setIsLoading(false);
         setShowWarning(true);
     }
+    finally {
+      setLoading(false);}
   };
   
-  const handleCancelPress = () => {
-    setShowWarning(true);
+  function handleExitPress() {  
+    Alert.alert(
+      '😯 Exit Test',
+      'If you exit the test now, you will lose all your progress. Are you sure you want to exit?',
+      [
+        {
+          text: 'Resume',
+          style: 'cancel',
+        },
+        {
+          text: 'Exit',
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+      { cancelable: true },
+    );
   };
 
-  const handleWarningConfirm = () => {
-    setShowWarning(false);
-  };
   //0559340134
   return (    
 
@@ -180,17 +191,23 @@ function SignupScreen() {
           <Button title='>>' onPress={handleAnswerSubmit} />
         </View>
 
-        <TouchableOpacity onPress={handleCancelPress}>
+        <TouchableOpacity onPress={handleExitPress}>
           <View style={styles.cancelContainer}>
             <View style={styles.numContainer}> 
               <Text style={styles.xxx}>X</Text>
             </View>
           </View> 
         </TouchableOpacity>    
-
+       
 
       </View>
+     
     </ScrollView> 
+    {loading && (
+        <View style={[styles.overlay,{flex: 1}]}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
   </KeyboardAvoidingView>
      
     );
@@ -208,8 +225,20 @@ function SignupScreen() {
      keyboardAvoidingView: {
     flex: 1,
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 999,
+  },
 
     container: {
+    zIndex: 1,
     flex: 1,
     alignItems: 'center', 
     justifyContent: 'center',
@@ -452,7 +481,8 @@ function SignupScreen() {
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 999,
   },
 
      popUp: {
@@ -607,28 +637,3 @@ function SignupScreen() {
 
 export default SignupScreen;
 
- /* const handleAnswerSubmit = () => {
-    if (questionIndex < questions.length - 1){
-      setAnswerInput('');
-      setQuestionIndex(questionIndex + 1);
-    } else {
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        navigation.navigate('Answers');
-      }, 6000);
-    }
-  };*/
-  /*
-  if (isLoading){
-    return (
-      <View style={styles.loadingContainer}>
-          <Image source={require('./assets/Iconnn.png') }
-            style={styles.logo} 
-            resizeMode='contain'
-            />
-            <Text style={styles.subtitle}>Loading...</Text>
-      </View>
-    );
-  }
-*/
