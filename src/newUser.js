@@ -364,11 +364,7 @@ const NewUser = () => {
           </View>
 
           <View style={styles.containerload}>
-      {loading && (
-        <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#0bdc9f" />
-        </View>
-      )}
+     
 
     </View>
 
@@ -428,6 +424,11 @@ const NewUser = () => {
           <Text style={styles.error}>{error}</Text>
         </View>
       </View>
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0bdc9f" />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -435,8 +436,9 @@ const NewUser = () => {
 const styles = StyleSheet.create({
   
   container: {
-    flex: 1,
+    flex: 1,  
   },
+ 
 
   title: {
     fontSize: 24,
@@ -596,6 +598,20 @@ pickerText: {
     marginTop: 50,
     alignItems: "center",
     height: 40,
+  },
+   pickerContainer: {
+    marginTop: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    backgroundColor: 'white',
+    marginLeft: 20,
+    marginRight: 20,
   },
   
   
