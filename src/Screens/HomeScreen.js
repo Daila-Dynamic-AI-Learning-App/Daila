@@ -14,6 +14,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import Button from "./../Components/Button";
+import Input from "../Components/Input";
 
 function HomeScreen() {
   const [email, setEmail] = useState("");
@@ -85,58 +87,32 @@ function HomeScreen() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.subContainer}>
-          <Image source={require("./assets/daila-1.png")} style={styles.logo} />
+          <Image source={require("./../assets/daila-1.png")} style={styles.logo} />
           <Text style={styles.welcome}>Welcome</Text>
           <Text style={styles.subtitle}>Your Dynamic AI Learning App</Text>
         </View>
 
        
         <KeyboardAvoidingView>
-          <View style={styles.inputContainer}>
-            <Image source={require("./assets/gMail.png")} style={styles.icon} />
-
-            <TextInput
-              style={styles.input}
+            <Input
+              icon={require("./../assets/gMail.png")}
               placeholder="Enter your email"
               value={email}
               onChangeText={(text) => setEmail(text)}
             />
-          </View>
-          <View style={styles.containerload}>
-
-    </View>
-
-          <View style={styles.inputContainer}>
-            <Image
-              source={require("./assets/passWord.png")}
-              style={styles.icon}
-            />
-
-            <TextInput
-              style={styles.input}
+            <View style={styles.containerload}></View>
+            <Input
+              type="password"
+              icon={require('./../assets/passWord.png')}
               placeholder="Enter your password"
               value={password}
               onChangeText={(text) => setPassword(text)}
-              secureTextEntry={!showPassword}
             />
-            <TouchableOpacity onPress={toggleShowPassword}>
-              <Image
-                source={
-                  showPassword
-                    ? require("./assets/showPass.png")
-                    : require("./assets/showPass.png")
-                }
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          </View>
           
           <TouchableOpacity onPress={showPasswordRecoveryAlert}>
             <Text style={styles.subtitleB}>Forgot Password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogin} style={styles.customLogIn}>
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
+          <Button onPress={handleLogin}>Login</Button>
 
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Need an account? </Text>

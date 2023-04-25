@@ -288,7 +288,7 @@ const NewUser = () => {
       <View style={styles.container}>
         <View style={styles.boxx}>
           <View style={styles.inputContainer}>
-            <Image source={require("./assets/trans.png")} style={styles.icon} />
+            <Image source={require("./../assets/trans.png")} style={styles.icon} />
             <TextInput
               style={styles.inputt}
               placeholder="Enter your full name"
@@ -302,14 +302,14 @@ const NewUser = () => {
   onPress={() => setShowPicker(true)}
 >
   <Image
-    source={require("./assets/flag-icon.png")}
+    source={require("./../assets/flag-icon.png")}
     style={styles.icon}
   />
   <Text style={styles.pickerText}>
     {country ? country : "Select your country"}
   </Text>
   <Image
-    source={require("./assets/arrow.png")}
+    source={require("./../assets/arrow.png")}
     style={styles.icon}
   />
 </TouchableOpacity>
@@ -351,7 +351,7 @@ const NewUser = () => {
           </Modal>
         
           <View style={styles.inputContainer}>
-            <Image source={require("./assets/gMail.png")} style={styles.icon} />
+            <Image source={require("./../assets/gMail.png")} style={styles.icon} />
 
             <TextInput
               style={styles.inputt}
@@ -370,7 +370,7 @@ const NewUser = () => {
 
           <View style={styles.inputContainer}>
             <Image
-              source={require("./assets/passWord.png")}
+              source={require("./../assets/passWord.png")}
               style={styles.icon}
             />
             <TextInput
@@ -385,8 +385,8 @@ const NewUser = () => {
               <Image
                 source={
                   showPassword
-                    ? require("./assets/showPass.png")
-                    : require("./assets/showPass.png")
+                    ? require("./../assets/showPass.png")
+                    : require("./../assets/showPass.png")
                 }
                 style={styles.icon}
               />
@@ -395,7 +395,7 @@ const NewUser = () => {
 
           <View style={styles.inputContainer}>
             <Image
-              source={require("./assets/passWord.png")}
+              source={require("./../assets/passWord.png")}
               style={styles.icon}
             />
             <TextInput
@@ -410,8 +410,8 @@ const NewUser = () => {
               <Image
                 source={
                   showPassword
-                    ? require("./assets/showPass.png")
-                    : require("./assets/showPass.png")
+                    ? require("./../assets/showPass.png")
+                    : require("./../assets/showPass.png")
                 }
                 style={styles.icon}
               />
