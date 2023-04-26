@@ -56,7 +56,7 @@ function LoadScreen() {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("./assets/daila-1.png")}
+        source={require("./../assets/daila-1.png")}
         style={[styles.logo, { opacity: opacity }]}
       />
     </View>

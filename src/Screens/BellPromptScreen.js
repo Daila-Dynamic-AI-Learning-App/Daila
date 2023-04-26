@@ -51,7 +51,7 @@ function BellPrompt() {
       
       <View style={styles.subContainerB}>
       <View style={styles.bellContainer}>
-        <Image source={require('./assets/bell2.png')}
+        <Image source={require('./../assets/bell2.png')}
     style={styles.logo}
     />
     
